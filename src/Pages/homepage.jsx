@@ -2,9 +2,10 @@ import chatImage from '../assets/chat-room.png';
 import fileShareImage from '../assets/file-share.png';
 import { CreateRoomForm, JoinRoomForm } from '../Forms/roomform';
 import React, { useState } from 'react';
+import { ChatPage } from './chatpage';
 
 
-function Navbar() {
+export function Navbar() {
     return (
         <nav className="w-full bg-amber-100 border-b border-gray-200">
             <div className="flex items-center justify-between h-16 px-6">
@@ -110,6 +111,7 @@ export function HomePage() {
                     </div>
                 </div>
             </div>
+            <ChatPage/>
         </div>
     );
 }
