@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/"
+const BASE_URL = "http://localhost:8080/";
 
 //create room API
 export const createRoom = async (payload) => {
@@ -10,16 +10,18 @@ export const createRoom = async (payload) => {
             },
             body: JSON.stringify(payload)
         })
-        if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
             console.log("room created in db")
-            return res;
+            return data;
         } else {
             console.log("else block of createRoom")
-            return null;
+            return data
         }
     }
-    catch {
-        console.log("catch block of createRoom")
+    catch (error){
+        console.log("catch block of createRoom", error);
+        return null;
     }
 };
 
@@ -33,16 +35,18 @@ export const joinRoom = async (payload) => {
             },
             body: JSON.stringify(payload)
         })
-        if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
             console.log("joined room")
-            return res;
+            return data;
         } else {
             console.log("else block of joinRoom")
-            return null;
+            return data;
         }
     }
     catch {
-        console.log("catch block of joinRoom")
+        console.log("catch block of joinRoom");
+        return null;
     }
 };
 
@@ -55,16 +59,18 @@ export const fetchOldMessages = async (roomId) => {
                 "Content-Type": "application/json",
             },
         })
-        if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
             console.log("got the room data")
-            return res;
+            return data;
         } else {
             console.log("else block of fetchOldMessages")
-            return null;
+            return data;
         }
     }
     catch {
-        console.log("catch block of fetchOldMessages")
+        console.log("catch block of fetchOldMessages");
+        return null;
     }
 };
  
