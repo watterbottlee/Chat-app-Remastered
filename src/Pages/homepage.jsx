@@ -14,7 +14,7 @@ export function Navbar() {
                     Chit Chat
                 </div>
                 {/* Right-aligned menu */}
-                <div className="flex space-x-10 text-xl font-mono text-gray-700">
+                <div className="flex space-x-10 text-xl font-mono text-black    ">
                     <span className="hover:text-amber-700 transition cursor-pointer">
                         Use Cases
                     </span>
@@ -38,15 +38,15 @@ export function HomePage() {
     // Close dialog helper
     const closeDialog = () => setDialog(null);
     return (
-        <div className="min-h-screen bg-amber-50">
+        <div className="min-h-screen bg-[#fae2aa]">
             <Navbar />
 
-            <div className="max-w-6xl mx-auto px-6 py-16">
+            <div className="max-w-6xl mx-auto  bg-[#fae2aa] px-6 py-16">
                 {/* Main Grid - Two Columns */}
                 <div className="grid grid-cols-2 gap-8">
 
                     {/* Left Column - Chat with People */}
-                    <div id="left-area" className="bg-white border-2 border-gray-800 rounded-lg p-8">
+                    <div id="left-area" className="bg-amber-100 border-2 border-gray-800 rounded-lg p-8">
                         {dialog === null ? (
                             <>
                                 <h2 className="text-2xl font-bold font-mono mb-6 text-center">
@@ -55,14 +55,14 @@ export function HomePage() {
 
                                 <div className="space-y-4">
                                     <button
-                                        className="w-full bg-white border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-green-400 transition cursor-pointer"
+                                        className="w-full bg-[#fae2aa] border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-green-400 transition cursor-pointer"
                                         onClick={() => setDialog('create')}
                                     >
                                         Create Room
                                     </button>
 
                                     <button
-                                        className="w-full bg-white border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-blue-400 transition cursor-pointer"
+                                        className="w-full bg-[#fae2aa] border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-blue-400 transition cursor-pointer"
                                         onClick={() => setDialog('join')}
                                     >
                                         Join Room
@@ -85,17 +85,17 @@ export function HomePage() {
                         )}
                     </div>
                     {/* Right Column - Transfer Files */}
-                    <div className="bg-white border-2 border-gray-800 rounded-lg p-8">
+                    <div className="bg-amber-100 border-2 border-gray-800 rounded-lg p-8">
                         <h2 className="text-2xl font-bold font-mono mb-6 text-center">
                             Transfer Files P2P
                         </h2>
 
                         <div className="space-y-4">
-                            <button className="w-full bg-white border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-green-400 transition cursor-pointer">
+                            <button className="w-full bg-[#fae2aa] border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-green-400 transition cursor-pointer">
                                 Create room
                             </button>
 
-                            <button className="w-full bg-white border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-blue-400 transition cursor-pointer">
+                            <button className="w-full bg-[#fae2aa] border-2 border-gray-800 rounded py-3 px-6 font-mono text-lg hover:bg-blue-400 transition cursor-pointer">
                                 Join Room
                             </button>
                         </div>
@@ -111,7 +111,6 @@ export function HomePage() {
                     </div>
                 </div>
             </div>
-            <ChatPage/>
         </div>
     );
 }

@@ -26,7 +26,7 @@ export const createRoom = async (payload) => {
 };
 
 //join room api
-export const joinRoom = async (payload) => {
+export const JoinRoom = async (payload) => {
     try {
         const res = await fetch(`${BASE_URL}api/v1/rooms/join-room`, {
             method: "POST",
