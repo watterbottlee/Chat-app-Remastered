@@ -1,5 +1,5 @@
 import { use, useState } from "react";
-import { createRoom } from "../services/roomService";
+import { createRoom,JoinRoom} from "../services/roomService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +30,12 @@ export function CreateRoomForm({onClose}){
             const res = await createRoom(payload)
             if(res.success){
                 toast.success("room created successfully") 
-                navigate("/chatpage")              
+                navigate("/chatpage",{
+                    state:{
+                        roomId,
+                        roomPassword
+                    }
+                })              
             }else{
                 toast.error("some error occured")
             }
@@ -133,7 +138,12 @@ export function JoinRoomForm({onClose}){
             const res = await JoinRoom(payload);
             if(res.success){
                 toast.success("room joined successfully") 
-                navigate("/chatpage")              
+                navigate("/chatpage",{
+                    state:{
+                        roomId,
+                        roomPassword
+                    }   
+                })              
             }else{
                 toast.error("some error occured")
             }

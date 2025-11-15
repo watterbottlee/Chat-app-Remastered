@@ -1,34 +1,76 @@
 
+import { useEffect, useState } from 'react';
 import { Navbar } from './homepage';
+import { useLocation } from 'react-router-dom';
+import { fetchOldMessages } from '../services/roomService';
 
 export function ChatPage() {
+
+    const [roomId, setRoomId] = useState("");
+    const [messages, setMessages] = useState([]);
+
+    const location = useLocation();
+
+    const getMessages = async (roomId) => {
+        const res = await fetchOldMessages(roomId);
+        setMessages(res.data)
+    }
+    useEffect(() => {
+        if (!location.state || !location.state.roomId || !location.state.roomPassword) {
+            navigate('/', { replace: true });
+            return;
+        }
+        setRoomId(location.state.roomId);
+        getMessages(location.state.roomId);
+    }, [roomId])
+
     return (
         <div className="min-h-screen font-mono bg-[#fae2aa] flex flex-col">
             <Navbar />
             <div className="flex-1 flex px-10 py-10 gap-8 ">
-                <div className="flex-3 flex flex-col px-6 py-6  bg-[#c7a452] p-6 border-2 border-gray-800 rounded-lg">
+
+                {/*chat box container */}
+                <div className="flex-3 flex flex-col px-6 py-6 bg-[#c7a452] p-6 border-2 border-gray-800 rounded-lg">
                     <div className="flex mb-4 px-4 justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100 ">
                         <div className="flex items-center">
-                           <ul className="text-amber-900">roomId:</ul>
-                           <ul className="text-green-600">kanishk897</ul>
+                            <ul className="text-amber-900">roomId:</ul>
+                            <ul className="text-green-600">{roomId}</ul>
                         </div>
                         <div className="flex items-center gap-5">
                             <ul className="text-blue-500">info</ul>
                             <ul className="text-red-500">exit</ul>
-                        </div>  
+                        </div>
                     </div>
-                    <div className="flex-1 flex px-4 mb-4 justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100">
-                        chat box
+
+                    {/*main chat area scrollable*/}
+                    <div
+                        id="chat-div"
+                        className="flex-1 max-h-133 max-w-231 overflow-y-auto px-4 mb-4 gap-6 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100"
+                    >
+                        {/* {JSON.stringify(messages)} */}
+                        {messages.map((message, index) => (
+                            <div
+                                key={index}
+                                className=""
+                            >
+                                <div className="font-semibold text-blue-600">{message.sender}</div>
+                                <div className="text-gray-800">{message.content}</div>
+                                <div className="text-sm text-gray-500 mt-1">
+                                    {new Date(message.timestamp).toLocaleString()}
+                                </div>
+                            </div>
+                        ))}
                     </div>
+
                     <div className="flex justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100 ">
                         <input className="flex-1 max-w-full p-2 rounded-lg outline-none"
-                        placeholder="Enter message"
+                            placeholder="Enter message"
                         />
                         <div className="flex items-center mr-2">
-                            <button className="bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg">
+                            <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg">
                                 send
                             </button>
-                        </div>  
+                        </div>
                     </div>
                 </div>
 
