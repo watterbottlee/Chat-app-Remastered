@@ -1,8 +1,9 @@
 
 import { useEffect, useState } from 'react';
 import { Navbar } from './homepage';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchOldMessages } from '../services/roomService';
+import { toast } from 'react-toastify';
 
 export function ChatPage() {
 
@@ -10,11 +11,18 @@ export function ChatPage() {
     const [messages, setMessages] = useState([]);
 
     const location = useLocation();
+    const navigate = useNavigate();
 
     const getMessages = async (roomId) => {
         const res = await fetchOldMessages(roomId);
         setMessages(res.data)
     }
+    
+    const handleExit = () =>{
+        navigate("/");
+        toast.success("Exited From Room")
+    }
+
     useEffect(() => {
         if (!location.state || !location.state.roomId || !location.state.roomPassword) {
             navigate('/', { replace: true });
@@ -38,26 +46,34 @@ export function ChatPage() {
                         </div>
                         <div className="flex items-center gap-5">
                             <ul className="text-blue-500">info</ul>
-                            <ul className="text-red-500">exit</ul>
+                                <button 
+                                className="text-red-500 hover:text-red-800 cursor-pointer"
+                                type="button"
+                                onClick={()=>handleExit()}                                
+                                >
+                                    exit
+                                </button>
                         </div>
                     </div>
 
                     {/*main chat area scrollable*/}
                     <div
                         id="chat-div"
-                        className="flex-1 max-h-133 max-w-231 overflow-y-auto px-4 mb-4 gap-6 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100"
+                        className="flex-1 max-h-133 py-2 max-w-231 overflow-y-auto px-4 mb-4 gap-6 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100"
                     >
                         {/* {JSON.stringify(messages)} */}
                         {messages.map((message, index) => (
                             <div
                                 key={index}
-                                className=""
+                                className="border-2 border-gray-800 rounded-lg p-2 mb-2 bg-green-300"
                             >
-                                <div className="font-semibold text-blue-600">{message.sender}</div>
-                                <div className="text-gray-800">{message.content}</div>
-                                <div className="text-sm text-gray-500 mt-1">
-                                    {new Date(message.timestamp).toLocaleString()}
+                                <div className="flex justify-between items-start">
+                                    <div className="font-mono text-blue-600">{message.sender}</div>
+                                    <div className="text-sm text-gray-500 mt-1">
+                                        {new Date(message.timestamp).toLocaleString()}
+                                    </div>
                                 </div>
+                                <div className="text-gray-800">{message.content}</div>
                             </div>
                         ))}
                     </div>
