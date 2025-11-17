@@ -5,7 +5,7 @@ export function TakeNameForm({onClose}) {
     const [userName, setUserName] = useState("");
 
     return (
-        <form className="bg-amber-100 text-2xl border-gray-800 max-w-full rounded-lg px-10 py-2 font-mono mx-auto">
+        <form className="bg-amber-100 text-2xl border-2 border-gray-800 max-w-full rounded-lg px-10 py-2 font-mono mx-auto">
             <div className="mb-4 ">
                 <div className="mt-2 flex-col mb-4 ">
                     <h2 className="flex-1 font-bold text-3xl text-center mb-5">Take an anonymous name </h2>
@@ -20,13 +20,13 @@ export function TakeNameForm({onClose}) {
                     value={userName}
                     placeholder="Temorary Anonymus Name"
                     onChange={(e) => setUserName(e.target.value)}
-                    className="w-full border border-gray-800 rounded px-3 py-2 text-lg focus:outline-green-400"
+                    className="w-full border-2 border-gray-800 rounded px-3 py-2 text-lg focus:outline-green-400"
                     required
                 />
             </div>
             <div>
                 <button
-                    className="w-full border mb-4 bg-green-500 rounded px-3 py-2 cursor-pointer hover:bg-green-600"
+                    className="w-full border-2 border-gray-800 mb-4 bg-green-500 rounded px-3 py-2 cursor-pointer hover:bg-green-600"
                     onClick={()=>onClose(userName)}
                 >
                     Confirm

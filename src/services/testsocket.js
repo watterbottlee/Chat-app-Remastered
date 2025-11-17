@@ -1,10 +1,42 @@
 import { connectToRoom } from './socket.js';
 
 const handleMessage = (message) => {
-  console.log('Received message:', message);
+    console.log('Received message:', message);
 };
 
-const test = connectToRoom("upgrade", handleMessage);
+const test = () => {
 
-console.log(test.isConnected());
-//kam toh kr rha h bhai.
+    let isConnectd = false;
+    let MessageQue = [];
+
+    const test = connectToRoom("upgrade", handleMessage);
+
+    //cheking connection:
+    const checkInterval = setInterval(() => {
+        let count =0;
+        console.log("setInterval started")
+        if (test.isConnected()) {
+            while (MessageQue.length > 0) {
+                const {content,sender} = MessageQue.shift();
+                test.sendMessage(content,sender)
+            }
+            clearInterval(checkInterval);
+            isConnectd = true;
+            console.log("set Interval stoped")
+        } else {
+            console.log("retrying connection...",count)
+            count++;
+        }
+    }, 1000);
+
+    const SendMessage = (content, sender) => {
+        if (test.isConnected()) {
+            return test.sendMessage(content, sender);
+        } else {
+            MessageQue.push({content: content, sender: sender});
+            console.log("Message queued:", content,sender);
+        }
+    }
+    SendMessage("hi im kanishk", "kanishk")
+}
+test();
