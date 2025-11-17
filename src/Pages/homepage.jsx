@@ -1,8 +1,8 @@
 import chatImage from '../assets/chat-room.png';
 import fileShareImage from '../assets/file-share.png';
+import { TakeNameForm } from '../Forms/nameform';
 import { CreateRoomForm, JoinRoomForm } from '../Forms/roomform';
 import React, { useState } from 'react';
-import { ChatPage } from './chatpage';
 
 
 export function Navbar() {

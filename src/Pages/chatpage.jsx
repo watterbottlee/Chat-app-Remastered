@@ -4,11 +4,21 @@ import { Navbar } from './homepage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchOldMessages } from '../services/roomService';
 import { toast } from 'react-toastify';
+import { TakeNameForm } from '../Forms/nameform';
 
 export function ChatPage() {
 
     const [roomId, setRoomId] = useState("");
     const [messages, setMessages] = useState([]);
+    const [userName, setUserName] = useState("");
+
+    const [dialog, setDialog] = useState("nameForm");
+
+    const closeDialog = (userNamehere) => {
+        setUserName(userNamehere);
+        console.log("user name is set to", userNamehere)
+        setDialog("chatArea");
+    }
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -17,8 +27,8 @@ export function ChatPage() {
         const res = await fetchOldMessages(roomId);
         setMessages(res.data)
     }
-    
-    const handleExit = () =>{
+
+    const handleExit = () => {
         navigate("/");
         toast.success("Exited From Room")
     }
@@ -46,47 +56,55 @@ export function ChatPage() {
                         </div>
                         <div className="flex items-center gap-5">
                             <ul className="text-blue-500">info</ul>
-                                <button 
+                            <button
                                 className="text-red-500 hover:text-red-800 cursor-pointer"
                                 type="button"
-                                onClick={()=>handleExit()}                                
-                                >
-                                    exit
-                                </button>
-                        </div>
-                    </div>
-
-                    {/*main chat area scrollable*/}
-                    <div
-                        id="chat-div"
-                        className="flex-1 max-h-133 py-2 max-w-231 overflow-y-auto px-4 mb-4 gap-6 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100"
-                    >
-                        {/* {JSON.stringify(messages)} */}
-                        {messages.map((message, index) => (
-                            <div
-                                key={index}
-                                className="border-2 border-gray-800 rounded-lg p-2 mb-2 bg-green-300"
+                                onClick={() => handleExit()}
                             >
-                                <div className="flex justify-between items-start">
-                                    <div className="font-mono text-blue-600">{message.sender}</div>
-                                    <div className="text-sm text-gray-500 mt-1">
-                                        {new Date(message.timestamp).toLocaleString()}
-                                    </div>
-                                </div>
-                                <div className="text-gray-800">{message.content}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="flex justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100 ">
-                        <input className="flex-1 max-w-full p-2 rounded-lg outline-none"
-                            placeholder="Enter message"
-                        />
-                        <div className="flex items-center mr-2">
-                            <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg">
-                                send
+                                exit
                             </button>
                         </div>
+                    </div>
+                    <div className="flex-1">
+                        {dialog === "nameForm" ? (
+                                <TakeNameForm onClose={closeDialog} />
+                        ) : dialog === "chatArea" ? (
+                            <>
+                                {/*main chat area scrollable*/}
+                                < div
+                                    id="chat-div"
+                                    className="flex-1 max-h-133 py-2 max-w-231 overflow-y-auto px-4 mb-4 gap-6 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100"
+                                >
+                                    {messages.map((message, index) => (
+                                        <div
+                                            key={index}
+                                            className="border-2 border-gray-800 rounded-lg p-2 mb-2 bg-green-300"
+                                        >
+                                            <div className="flex justify-between items-start">
+                                                <div className="font-mono text-blue-600">{message.sender}</div>
+                                                <div className="text-sm text-gray-500 mt-1">
+                                                    {new Date(message.timestamp).toLocaleString()}
+                                                </div>
+                                            </div>
+                                            <div className="text-gray-800">{message.content}</div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* text input and send button area */}
+                                <div className="flex justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100 ">
+                                    <input className="flex-1 max-w-full p-2 rounded-lg outline-none"
+                                        placeholder="Enter message"
+                                    />
+                                    <div className="flex items-center mr-2">
+                                        <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg">
+                                            send
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        ) : null
+                        }
                     </div>
                 </div>
 
@@ -95,7 +113,6 @@ export function ChatPage() {
                     <p className="text-black">Content for the second box</p>
                 </div>
             </div>
-
-        </div>
+        </div >
     );
 }
