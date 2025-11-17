@@ -1,4 +1,4 @@
-import { connectToRoom } from './socket.js';
+import { connectToRoom, socketService } from './socket.js';
 
 const handleMessage = (message) => {
     console.log('Received message:', message);

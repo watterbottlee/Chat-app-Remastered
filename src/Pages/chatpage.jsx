@@ -1,11 +1,11 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navbar } from './homepage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchOldMessages } from '../services/roomService';
 import { toast } from 'react-toastify';
 import { TakeNameForm } from '../Forms/nameform';
-import { connectToRoom } from '../services/socket';
+import { socketService } from '../services/socket';
 
 export function ChatPage() {
 
@@ -13,6 +13,8 @@ export function ChatPage() {
     const [messages, setMessages] = useState([]);
     const [userName, setUserName] = useState("");
     const [inputMessage, setInputMessage] = useState("");
+    const socketServiceRef = useRef(null);
+
 
     const [dialog, setDialog] = useState("nameForm");
 
@@ -22,48 +24,15 @@ export function ChatPage() {
         setDialog("chatArea");
     }
 
-    
+
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleMessage = (message) => {
+    const handleMessageReceived = (message) => {
         console.log('Received message:', message);
     };
 
-    const handleSendMessage = () => {
-
-        let isConnectd = false;
-        let MessageQue = [];
-
-        const test = connectToRoom("upgrade", handleMessage);
-
-        //cheking connection:
-        const checkInterval = setInterval(() => {
-            let count = 0;
-            console.log("setInterval started")
-            if (test.isConnected()) {
-                while (MessageQue.length > 0) {
-                    const { content, sender } = MessageQue.shift();
-                    test.sendMessage(content, sender)
-                }
-                isConnectd = true;
-            } else {
-                console.log("retrying connection...", count)
-                count++;
-                tryingToConnect = true;
-            }
-        }, 1000);
-
-        const sendMessage = (content, sender) => {
-            if (test.isConnected()) {
-                return test.sendMessage(content, sender);
-            } else {
-                MessageQue.push({ content: content, sender: sender });
-                console.log("Message queued:", content, sender);
-            }
-        };
-        return {sendMessage}
-    }
+    let socketServiceObj;
 
     const getMessages = async (roomId) => {
         const res = await fetchOldMessages(roomId);
@@ -82,7 +51,15 @@ export function ChatPage() {
         }
         setRoomId(location.state.roomId);
         getMessages(location.state.roomId);
-    }, [roomId])
+    }, []);
+    useEffect(() => {
+        if (!roomId) return;
+        console.log('Creating socket connection for room:', roomId);
+        socketServiceRef.current = socketService(roomId, handleMessageReceived);
+        return () => {
+            console.log('Component unmounting - cleanup if needed');
+        };
+    }, [roomId]);
 
     return (
         <div className="min-h-screen font-mono bg-[#fae2aa] flex flex-col">
@@ -139,13 +116,13 @@ export function ChatPage() {
                                         type="text"
                                         id="inputMessage"
                                         value={inputMessage}
-                                        onChange={(e)=>setInputMessage(e.target.value)}
+                                        onChange={(e) => setInputMessage(e.target.value)}
                                         placeholder="Enter message"
                                         required
                                     />
                                     <div className="flex items-center mr-2">
                                         <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg"
-                                            onClick={()=>handleSendMessage().sendMessage(inputMessage,userName)}
+                                            onClick={() => socketServiceRef.current?.sendMessage(inputMessage, userName)}
                                         >
                                             send
                                         </button>
