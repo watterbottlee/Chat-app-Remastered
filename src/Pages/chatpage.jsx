@@ -5,12 +5,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchOldMessages } from '../services/roomService';
 import { toast } from 'react-toastify';
 import { TakeNameForm } from '../Forms/nameform';
+import { connectToRoom } from '../services/socket';
 
 export function ChatPage() {
 
     const [roomId, setRoomId] = useState("");
     const [messages, setMessages] = useState([]);
     const [userName, setUserName] = useState("");
+    const [inputMessage, setInputMessage] = useState("");
 
     const [dialog, setDialog] = useState("nameForm");
 
@@ -20,8 +22,48 @@ export function ChatPage() {
         setDialog("chatArea");
     }
 
+    
     const location = useLocation();
     const navigate = useNavigate();
+
+    const handleMessage = (message) => {
+        console.log('Received message:', message);
+    };
+
+    const handleSendMessage = () => {
+
+        let isConnectd = false;
+        let MessageQue = [];
+
+        const test = connectToRoom("upgrade", handleMessage);
+
+        //cheking connection:
+        const checkInterval = setInterval(() => {
+            let count = 0;
+            console.log("setInterval started")
+            if (test.isConnected()) {
+                while (MessageQue.length > 0) {
+                    const { content, sender } = MessageQue.shift();
+                    test.sendMessage(content, sender)
+                }
+                isConnectd = true;
+            } else {
+                console.log("retrying connection...", count)
+                count++;
+                tryingToConnect = true;
+            }
+        }, 1000);
+
+        const sendMessage = (content, sender) => {
+            if (test.isConnected()) {
+                return test.sendMessage(content, sender);
+            } else {
+                MessageQue.push({ content: content, sender: sender });
+                console.log("Message queued:", content, sender);
+            }
+        };
+        return {sendMessage}
+    }
 
     const getMessages = async (roomId) => {
         const res = await fetchOldMessages(roomId);
@@ -67,7 +109,7 @@ export function ChatPage() {
                     </div>
                     <div className="flex-1">
                         {dialog === "nameForm" ? (
-                                <TakeNameForm onClose={closeDialog} />
+                            <TakeNameForm onClose={closeDialog} />
                         ) : dialog === "chatArea" ? (
                             <>
                                 {/*main chat area scrollable*/}
@@ -94,10 +136,17 @@ export function ChatPage() {
                                 {/* text input and send button area */}
                                 <div className="flex justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100 ">
                                     <input className="flex-1 max-w-full p-2 rounded-lg outline-none"
+                                        type="text"
+                                        id="inputMessage"
+                                        value={inputMessage}
+                                        onChange={(e)=>setInputMessage(e.target.value)}
                                         placeholder="Enter message"
+                                        required
                                     />
                                     <div className="flex items-center mr-2">
-                                        <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg">
+                                        <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg"
+                                            onClick={()=>handleSendMessage().sendMessage(inputMessage,userName)}
+                                        >
                                             send
                                         </button>
                                     </div>

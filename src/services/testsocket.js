@@ -9,6 +9,7 @@ const test = () => {
     let isConnectd = false;
     let MessageQue = [];
 
+
     const test = connectToRoom("upgrade", handleMessage);
 
     //cheking connection:
@@ -20,12 +21,11 @@ const test = () => {
                 const {content,sender} = MessageQue.shift();
                 test.sendMessage(content,sender)
             }
-            clearInterval(checkInterval);
             isConnectd = true;
-            console.log("set Interval stoped")
         } else {
             console.log("retrying connection...",count)
             count++;
+            tryingToConnect = true;
         }
     }, 1000);
 
