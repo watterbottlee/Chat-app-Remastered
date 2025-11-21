@@ -6,6 +6,7 @@ import { fetchOldMessages } from '../services/roomService';
 import { toast } from 'react-toastify';
 import { TakeNameForm } from '../Forms/nameform';
 import { socketService } from '../services/socket';
+import { ChatArea } from '../components/chatarea';
 
 export function ChatPage() {
 
@@ -30,13 +31,16 @@ export function ChatPage() {
 
     const handleMessageReceived = (message) => {
         console.log('Received message:', message);
+        setMessages(prevMessages => [...prevMessages, message]);
     };
-
-    let socketServiceObj;
 
     const getMessages = async (roomId) => {
         const res = await fetchOldMessages(roomId);
-        setMessages(res.data)
+        if (res && res.data) {
+            setMessages(res.data);
+        } else {
+            console.log("Failed to get messages or empty response");
+        }
     }
 
     const handleExit = () => {
@@ -90,29 +94,7 @@ export function ChatPage() {
                         ) : dialog === "chatArea" ? (
                             <>
                                 {/*main chat area scrollable*/}
-                                < div
-                                    id="chat-div"
-                                    className="flex-1 min-h-133 max-h-133 py-2 max-w-231 overflow-y-auto px-4 mb-4 gap-6 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100"
-                                >
-                                    {messages.length === 0 ? (
-                                        <div className="py-3 text-justify text-green-800 font-mono">No Messages yet, say something to the people associated here..</div>
-                                    ) : (
-                                        messages.map((message, index) => (
-                                            <div
-                                                key={index}
-                                                className="border-2 border-gray-800 rounded-lg p-2 mb-2 bg-green-300"
-                                            >
-                                                <div className="flex justify-between items-start">
-                                                    <div className="font-mono text-blue-600">{message.sender}</div>
-                                                    <div className="text-sm text-gray-500 mt-1">
-                                                        {new Date(message.timestamp).toLocaleString()}
-                                                    </div>
-                                                </div>
-                                                <div className="text-gray-800">{message.content}</div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
+                                <ChatArea messages={messages} />
 
                                 {/* text input and send button area */}
                                 <div className="flex justify-between gap-6 h-15 text-2xl border-2 border-gray-800 rounded-lg bg-yellow-100 ">
@@ -126,7 +108,11 @@ export function ChatPage() {
                                     />
                                     <div className="flex items-center mr-2">
                                         <button className="border-2 border-gray-800 bg-green-500 text-2xl py-1.5 px-1.5 hover:bg-green-600 cursor-pointer rounded-lg"
-                                            onClick={() => socketServiceRef.current?.sendMessage(inputMessage, userName)}
+                                            onClick={() => {
+                                                socketServiceRef.current?.sendMessage(inputMessage, userName)
+                                                setInputMessage('');
+                                            }
+                                            }
                                         >
                                             send
                                         </button>

@@ -74,7 +74,6 @@ export const socketService = (roomId, onMessageReceived) => {
     } else {
       // console.log("retrying connection...", count)
       count++;
-      tryingToConnect = true;
     }
   }, 1000);
 

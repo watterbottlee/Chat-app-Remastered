@@ -56,10 +56,11 @@ export const fetchOldMessages = async (roomId) => {
         const res = await fetch(`${BASE_URL}api/v1/rooms/${roomId}/messages`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
         })
         const data = await res.json();
+        console.log(data)
         if (data.success) {
             console.log("got the room data")
             return data;
@@ -68,14 +69,12 @@ export const fetchOldMessages = async (roomId) => {
             return data;
         }
     }
-    catch {
-        console.log("catch block of fetchOldMessages");
+    catch (error){
+        console.log("catch block of fetchOldMessages",error);
         return null;
     }
 };
- 
-const data = await fetchOldMessages("upgrade");
-console.log(data);
+
 //dummy data
 const obj = {
   "roomId": "superroom",
