@@ -2,6 +2,16 @@
 
 A modern, real-time chat application built with React and Spring Boot, featuring secure room-based communication with WebSocket technology.
 
+## Sample view of its working.
+https://github.com/user-attachments/assets/2413e390-7937-40fd-9b60-273ec212d455
+
+## Author notes
+this repo is just a provided interface for the backedend repo at `https://github.com/watterbottlee/Chat-app-backend-remastered`
+this serves the room connection features ,older message loading and real time message broadcasting. i havent added complex user registration and authrization and caching in the backedend just to make it simpler as 
+this project is just to showcase that i have worked in sockets and know the functioning of it. Also for the students and newcommers this repo is well suited to explore because it is clean and modern. codes are as
+loosely coupled as possible given that it needs the backend to be set up before the `npm run dev` .
+so feel free to fork, clone and pull this repo. i would highly appreciate any helpfull contributions and ui enhancements.
+
 ## 🚀 Features
 
 - **Room-Based Chat**: Create and join private chat rooms with unique IDs and password protection
@@ -159,17 +169,13 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 👥 Authors
 
-Your Name - [kanishk](https://github.com/watterbottlee)
+kanishk ranjan barman- [watterbottlee](https://github.com/watterbottlee)
 
 ## 🙏 Acknowledgments
 
-- Spring Boot for the robust backend framework
+- Spring Boot for the backend framework
 - React team for the amazing frontend library
 - STOMP.js for WebSocket implementation
 - Tailwind CSS for the styling system
