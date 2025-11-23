@@ -186,7 +186,7 @@ kanishk ranjan barman- [watterbottlee](https://github.com/watterbottlee)
 
 ## 📞 Support
 
-For support, email kaniskaranjanbarman@example.com or open an issue in the repository.
+For support, email kaniskaranjanbarman@gmail.com or open an issue in the repository.
 
 ---
 
