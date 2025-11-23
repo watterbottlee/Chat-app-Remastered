@@ -3,7 +3,11 @@
 A modern, real-time chat application built with React and Spring Boot, featuring secure room-based communication with WebSocket technology.
 
 ## Sample view of its working.
-https://github.com/user-attachments/assets/2413e390-7937-40fd-9b60-273ec212d455
+
+
+https://github.com/user-attachments/assets/2cf4a245-9755-4e13-8dc3-6409ee89b61e
+
+
 
 ## Author notes
 this repo is just a provided interface for the backedend repo at `https://github.com/watterbottlee/Chat-app-backend-remastered`
